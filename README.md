@@ -1,14 +1,19 @@
-# jobboard
+jobs: Angular JS demo app, with a clojure API
+=============================================
 
-A Clojure library designed to ... well, that part is up to you.
+Ultra simple CRUD API, with a client-side,
+single-page Angular JS app. The stored model
+is meant to handle information for a job board.
 
-## Usage
+The API exposes only 3 routes:
 
-FIXME
+* *GET* `/jobs`: retrieve jobs
+* *POST* `/jobs`: create a new job, an ID is assigned
+* *DELETE* `/jobs/:id`: deletes a job by ID
 
-## License
+The app is served as un-minified static content, sources
+are available in the `resources/public` directory.
 
-Copyright © 2013 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+The Angular application is contained in a single file but
+provides a service, controller and router for a single page
+application.
