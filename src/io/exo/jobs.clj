@@ -5,24 +5,18 @@
             [compojure.handler    :as handler]
             [compojure.route      :as route]
             [compojure.core       :refer [defroutes GET POST DELETE context]]
-            [ring.util.response   :refer [response content-type
-                                          status redirect]]))
+            [ring.util.response   :refer [response content-type redirect]]))
 
 (def ^{:doc "Atom holding our jobs"} db (atom {}))
 
-(defn uuid
-  "A random UUID"
-  []
-  (str (java.util.UUID/randomUUID)))
-
 (defn create!
-  "Insert a new job"
+  "Insert a new job with a random ID, yields the updated job map"
   [job]
-  (let [id (uuid)]
+  (let [id (str (java.util.UUID/randomUUID))]
     (swap! db assoc id (assoc job :id id))))
 
 (defn delete!
-  "Remove a job"
+  "Remove a job, yields the updated map"
   [id]
   (swap! db dissoc id))
 
@@ -37,8 +31,7 @@
 (defroutes job-api
   (GET  "/" []             (redirect "/index.html"))
   (GET  "/jobs" []         (response @db))
-  (POST "/jobs" req        (-> (response (create! (:body req)))
-                               (status 201)))
+  (POST "/jobs" req        (response (create! (:body req))))
   (DELETE "/jobs/:id" [id] (response (delete! id)))
   (route/resources         "/")
   (route/not-found         "<html><h2>404</h2></html>"))
