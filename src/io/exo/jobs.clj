@@ -30,10 +30,13 @@
       (json/wrap-json-response)))
 
 (defroutes job-api
-  (GET  "/" []             (redirect "/index.html"))
+  "Main router: 3 REST routes and resource handlers."
+  
   (GET  "/jobs" []         (response @db))
   (POST "/jobs" req        (response (create! (:body req))))
   (DELETE "/jobs/:id" [id] (response (delete! id)))
+  
+  (GET  "/" []             (redirect "/index.html"))
   (route/resources         "/")
   (route/not-found         "<html><h2>404</h2></html>"))
 
