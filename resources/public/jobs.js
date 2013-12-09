@@ -1,0 +1,58 @@
+var app = angular.module('jobs', ['ngRoute']);
+
+app.factory('$jobs', function ($http) {
+   return {
+       create: function (job) {
+           return $http.post('/jobs', job);
+       },
+       list: function() {
+           return $http.get('/jobs');
+       },
+       delete: function(id) {
+           return $http.delete('/jobs/' + id);
+       }
+   };
+});
+
+app.controller('Jobs', function($scope, $routeParams, $location, $jobs) {
+
+    $scope.jobs = [];
+
+    $jobs.list().success(function (data) {
+        $scope.jobs = data;
+    });
+
+    if ($routeParams.id) {
+        $scope.jobid = $routeParams.id;
+    }
+
+    $scope.job_list = function() {
+        var l = [];
+        for (var k in $scope.jobs) {
+            l.push($scope.jobs[k]);
+        }
+        return l;
+    };
+
+    $scope.create_job = function (job) {
+        $jobs.create(job).success(function (data) {
+            $scope.jobs = data;
+            $location.path('/jobs');
+        });
+    };
+
+    $scope.delete_job = function (job) {
+        $jobs.delete(job.id).success(function (data) {
+            $scope.jobs = data;
+            $location.path('/jobs');
+        });
+    };
+});
+
+app.config(function($routeProvider) {
+    $routeProvider
+        .when('/list', {templateUrl: 'listing.html', controller: 'Jobs'})
+        .when('/details/:id', {templateUrl: 'details.html', controller: 'Jobs'})
+        .when('/post', {templateUrl: 'post.html', controller: 'Jobs'})
+        .otherwise({redirectTo: '/list'});
+});
