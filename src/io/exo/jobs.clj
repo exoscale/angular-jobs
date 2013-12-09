@@ -40,4 +40,5 @@
 (defn -main
   "Start the API"
   [& args]
-  (server/run-server (mksite job-api) {:port 8080}))
+  (server/run-server (mksite job-api) {:port 8080})
+  nil)
