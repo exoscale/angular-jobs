@@ -5,7 +5,8 @@
             [compojure.handler    :as handler]
             [compojure.route      :as route]
             [compojure.core       :refer [defroutes GET POST DELETE context]]
-            [ring.util.response   :refer [response content-type redirect]]))
+            [ring.util.response   :refer [response content-type redirect]])
+  (:gen-class))
 
 (def ^{:doc "Atom holding our jobs"} db (atom {}))
 
