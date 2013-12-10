@@ -29,6 +29,7 @@ app.controller('Jobs', function($scope, $routeParams, $location, $jobs) {
     $scope.job_list = function() {
         var l = [];
         for (var k in $scope.jobs) {
+            $scope.jobs[k].id = k;
             l.push($scope.jobs[k]);
         }
         return l;
@@ -41,8 +42,8 @@ app.controller('Jobs', function($scope, $routeParams, $location, $jobs) {
         });
     };
 
-    $scope.delete_job = function (job) {
-        $jobs.delete(job.id).success(function (data) {
+    $scope.delete_job = function (jobid) {
+        $jobs.delete(jobid).success(function (data) {
             $scope.jobs = data;
             $location.path('/jobs');
         });

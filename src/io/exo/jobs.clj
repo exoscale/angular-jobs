@@ -1,5 +1,5 @@
 (ns io.exo.jobs
-  "Simplistic JSON API for a Job board"
+  "Simplistic JSON API for a Job board. No validation"
   (:require [org.httpkit.server   :as server]
             [ring.middleware.json :as json]
             [compojure.route      :as route]
@@ -13,7 +13,7 @@
   "Insert a new job with a random ID, yields the updated job map"
   [job]
   (let [id (str (java.util.UUID/randomUUID))]
-    (swap! db assoc id (assoc job :id id))))
+    (swap! db assoc id job)))
 
 (defn delete!
   "Remove a job, yields the updated map"
@@ -32,7 +32,7 @@
   (route/not-found         "<html><h2>404</h2></html>"))
 
 (defn -main
-  "Start the API"
+  "Start the API, forces port 8080"
   [& args]
   (let [api (-> api-routes (json/wrap-json-body) (json/wrap-json-response))
         cfg {:port 8080}]
