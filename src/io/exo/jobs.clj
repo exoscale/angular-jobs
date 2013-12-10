@@ -2,7 +2,6 @@
   "Simplistic JSON API for a Job board"
   (:require [org.httpkit.server   :as server]
             [ring.middleware.json :as json]
-            [compojure.handler    :as handler]
             [compojure.route      :as route]
             [compojure.core       :refer [defroutes GET POST DELETE]]
             [ring.util.response   :refer [response redirect]])
@@ -21,21 +20,13 @@
   [id]
   (swap! db dissoc id))
 
-(defn mksite
-  "Build a handler for our API routes."
-  [routes]
-  (-> routes
-      (handler/api)
-      (json/wrap-json-body {:keywords? true})
-      (json/wrap-json-response)))
-
-(defroutes job-api
+(defroutes api-routes
   "Main router: 3 REST routes and resource handlers."
-  
+
   (GET  "/jobs" []         (response @db))
   (POST "/jobs" req        (response (create! (:body req))))
   (DELETE "/jobs/:id" [id] (response (delete! id)))
-  
+
   (GET  "/" []             (redirect "/index.html"))
   (route/resources         "/")
   (route/not-found         "<html><h2>404</h2></html>"))
@@ -43,5 +34,7 @@
 (defn -main
   "Start the API"
   [& args]
-  (server/run-server (mksite job-api) {:port 8080})
-  nil)
+  (let [api (-> api-routes (json/wrap-json-body) (json/wrap-json-response))
+        cfg {:port 8080}]
+    (server/run-server api cfg)
+    (println "Job board API up and running on http://localhost:8080")))
