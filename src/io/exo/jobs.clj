@@ -4,8 +4,8 @@
             [ring.middleware.json :as json]
             [compojure.handler    :as handler]
             [compojure.route      :as route]
-            [compojure.core       :refer [defroutes GET POST DELETE context]]
-            [ring.util.response   :refer [response content-type redirect]])
+            [compojure.core       :refer [defroutes GET POST DELETE]]
+            [ring.util.response   :refer [response redirect]])
   (:gen-class))
 
 (def ^{:doc "Atom holding our jobs"} db (atom {}))
