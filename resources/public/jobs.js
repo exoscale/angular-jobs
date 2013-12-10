@@ -16,7 +16,7 @@ app.factory('$jobs', function ($http) {
 
 app.controller('Jobs', function($scope, $routeParams, $location, $jobs) {
 
-    $scope.jobs = [];
+    $scope.jobs = {};
 
     $jobs.list().success(function (data) {
         $scope.jobs = data;
